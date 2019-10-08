@@ -1,3 +1,0 @@
-Styled components better class names
-Source map root change
-Authentication
