@@ -8,7 +8,7 @@ import {
 
 interface Props {
     size: number;
-    color: 'red' | 'blue';
+    color: 'red' | 'blue' | string;
 }
 
 const colors = {
@@ -23,9 +23,9 @@ function HomeBox(props: Props) {
     display: flex;
     align-items: center;
     border-radius: 8px;
-    background: ${colors[color]};
-    height: ${size};
-    width: ${size};
+    background: ${colors[color as ('red' | 'blue')]};
+    height: ${size}px;
+    width: ${size}px;
   `;
 
   const Text = styled(Typography)`
