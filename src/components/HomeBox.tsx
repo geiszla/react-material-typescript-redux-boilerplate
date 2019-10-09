@@ -1,45 +1,44 @@
 import React from 'react';
+import styled from 'styled-components';
 
 import {
   Paper,
   Typography,
-  makeStyles,
 } from '@material-ui/core';
 
 interface Props {
     size: number;
-    color: 'red' | 'blue' | string;
+    color: 'red' | 'blue';
 }
+
+const colors = {
+  red: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+  blue: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+};
 
 function HomeBox(props: Props) {
-  const classes = useStyles(props);
+  const { color, size } = props;
+
+  const Box = styled(Paper)`
+    display: flex;
+    align-items: center;
+    border-radius: 8px;
+    background: ${colors[color]};
+    height: ${size};
+    width: ${size};
+  `;
+
+  const Text = styled(Typography)`
+    color: white;
+  `;
 
   return (
-    <Paper className={classes.box}>
-      <Typography variant="subtitle1" className={classes.text}>
+    <Box>
+      <Text variant="subtitle1">
         I&apos;m an example how to handle dynamic styles based on props
-      </Typography>
-    </Paper>
+      </Text>
+    </Box>
   );
 }
-
-const styledBy = (property: string, props: any, mapping: any): string => mapping[props[property]];
-const useStyles = makeStyles(() => ({
-  box: (props: Props) => ({
-    display: 'flex',
-    alignItems: 'center',
-    borderRadius: 8,
-    background: styledBy('color', props, {
-      red: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
-      blue: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
-    }),
-    height: props.size,
-    width: props.size,
-  }),
-
-  text: {
-    color: 'white',
-  },
-}));
 
 export default HomeBox;

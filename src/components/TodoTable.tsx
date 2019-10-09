@@ -1,5 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
+import styled from 'styled-components';
 
 import {
   Checkbox,
@@ -12,17 +13,23 @@ import {
   TableRow,
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { makeStyles } from '@material-ui/styles';
 
 import useActions from '../actions';
 import * as TodoActions from '../actions/todo';
 import { Todo } from '../model/model';
 import { RootState } from '../reducers';
 
-interface Props {}
-
 function TodoTable() {
-  const classes = useStyles();
+  const Root = styled(Paper)`
+    width: 100%;
+    min-width: 260px;
+    display: inline-block;
+  `;
+
+  const ContentTable = styled(Table)`
+    width: 100%;
+  `;
+
   const todoList = useSelector((state: RootState) => state.todoList);
   const todoActions = useActions(TodoActions);
 
@@ -35,8 +42,8 @@ function TodoTable() {
   };
 
   return (
-    <Paper className={classes.paper}>
-      <Table className={classes.table}>
+    <Root>
+      <ContentTable>
         <TableHead>
           <TableRow>
             <TableCell padding="default">Completed</TableCell>
@@ -44,6 +51,7 @@ function TodoTable() {
             <TableCell padding="default">Delete</TableCell>
           </TableRow>
         </TableHead>
+
         <TableBody>
           {todoList.map((n: Todo) => (
             <TableRow
@@ -67,20 +75,9 @@ function TodoTable() {
             </TableRow>
           ))}
         </TableBody>
-      </Table>
-    </Paper>
+      </ContentTable>
+    </Root>
   );
 }
-
-const useStyles = makeStyles({
-  paper: {
-    width: '100%',
-    minWidth: 260,
-    display: 'inline-block',
-  },
-  table: {
-    width: '100%',
-  },
-});
 
 export default TodoTable;

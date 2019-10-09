@@ -1,4 +1,5 @@
 import React from 'react';
+import styled from 'styled-components';
 
 import {
   Button,
@@ -7,7 +8,6 @@ import {
   DialogTitle,
   TextField,
 } from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
 
 import useActions from '../actions';
 import * as TodoActions from '../actions/todo';
@@ -18,10 +18,15 @@ interface Props {
 }
 
 function TodoDialog(props: Props) {
-  const { open, onClose } = props;
-  const classes = useStyles();
   const [newTodoText, setNewTodoText] = React.useState('');
   const todoActions = useActions(TodoActions);
+
+  const { open, onClose } = props;
+
+  const NameField = styled(TextField)`
+    width: 80%;
+    margin: 20px;
+  `;
 
   const handleClose = () => {
     todoActions.addTodo({
@@ -42,12 +47,11 @@ function TodoDialog(props: Props) {
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Add a new TODO</DialogTitle>
-      <TextField
+      <NameField
         id="multiline-flexible"
         multiline
         value={newTodoText}
         onChange={handleChange}
-        className={classes.textField}
       />
       <DialogActions>
         <Button color="primary" onClick={handleClose}>
@@ -57,12 +61,5 @@ function TodoDialog(props: Props) {
     </Dialog>
   );
 }
-
-const useStyles = makeStyles({
-  textField: {
-    width: '80%',
-    margin: 20,
-  },
-});
 
 export default TodoDialog;

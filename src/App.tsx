@@ -5,35 +5,26 @@ import styled from 'styled-components';
 
 import {
   AppBar,
-  Badge,
-  Divider,
   Drawer,
   Hidden,
   IconButton,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
   Toolbar,
   Typography,
 } from '@material-ui/core';
 import { Theme } from '@material-ui/core/styles';
 import { WithWidth, isWidthUp } from '@material-ui/core/withWidth';
-import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered';
-import HomeIcon from '@material-ui/icons/Home';
 import MenuIcon from '@material-ui/icons/Menu';
-import { makeStyles, useTheme } from '@material-ui/styles';
+import { useTheme } from '@material-ui/styles';
 
+import createMenuItems from './components/MenuItems';
 import { Todo } from './model/model';
 import HomePage from './pages/HomePage';
 import TodoPage from './pages/TodoPage';
 
-// Types
 interface Props extends RouteComponentProps<void>, WithWidth {
   todoList: Todo[];
 }
 
-// App
 const history = createBrowserHistory();
 
 function App(props?: Props) {
@@ -46,11 +37,7 @@ function App(props?: Props) {
 
   const { todoList, width } = props;
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
-
-  // Styles
+  // Styled components
   const Root = styled.div`
     width: 100%;
     height: 100%;
@@ -65,7 +52,7 @@ function App(props?: Props) {
     height: 100%;
   `;
 
-  const StyledAppBar = styled(AppBar)`
+  const MainAppBar = styled(AppBar)`
     z-index: ${theme.zIndex.drawer + 1};
     position: absolute;
   `;
@@ -76,7 +63,7 @@ function App(props?: Props) {
     }
   `;
 
-  const StyledDrawer = styled(Drawer)`
+  const MenuDrawer = styled(Drawer)`
     & .paper {
       width: 250px;
       background-color: ${theme.palette.background.default};
@@ -101,11 +88,17 @@ function App(props?: Props) {
     };
   `;
 
+  const MenuItems = createMenuItems(history);
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
   return (
     <Router history={history}>
       <Root>
         <Frame>
-          <StyledAppBar>
+          <MainAppBar>
             <Toolbar>
               <NavigationIcon
                 color="inherit"
@@ -119,10 +112,10 @@ function App(props?: Props) {
                 Create-React-App with Material-UI, Typescript, Redux and Routing
               </Typography>
             </Toolbar>
-          </StyledAppBar>
+          </MainAppBar>
 
           <Hidden mdUp>
-            <StyledDrawer
+            <MenuDrawer
               variant="temporary"
               anchor="left"
               open={mobileOpen}
@@ -134,14 +127,14 @@ function App(props?: Props) {
                 keepMounted: true, // Better open performance on mobile.
               }}
             >
-              <MenuDrawer todoList={todoList} />
-            </StyledDrawer>
+              <MenuItems todoList={todoList} />
+            </MenuDrawer>
           </Hidden>
 
           <Hidden smDown>
-            <StyledDrawer variant="permanent" open classes={{ paper: 'paper' }}>
-              <MenuDrawer todoList={todoList} />
-            </StyledDrawer>
+            <MenuDrawer variant="permanent" open classes={{ paper: 'paper' }}>
+              <MenuItems todoList={todoList} />
+            </MenuDrawer>
           </Hidden>
 
           <Routes>
@@ -153,57 +146,6 @@ function App(props?: Props) {
       </Root>
     </Router>
   );
-}
-
-// Menu Drawer
-const useStyles = makeStyles((theme: Theme) => ({ drawerHeader: theme.mixins.toolbar }));
-
-function MenuDrawer(props: { todoList: Todo[] }) {
-  const { todoList } = props;
-
-  return (
-    <div>
-      <div className={useStyles().drawerHeader} />
-
-      <Divider />
-
-      <List>
-        <ListItem button onClick={() => history.push('/')}>
-          <ListItemIcon>
-            <HomeIcon />
-          </ListItemIcon>
-          <ListItemText primary="Home" />
-        </ListItem>
-      </List>
-
-      <Divider />
-
-      <List>
-        <ListItem button onClick={() => history.push('/todo')}>
-          <ListItemIcon>
-            <TodoIcon todoList={todoList} />
-          </ListItemIcon>
-          <ListItemText primary="Todo" />
-        </ListItem>
-      </List>
-    </div>
-  );
-}
-
-// Todo Icon
-function TodoIcon(props: { todoList: Todo[] }) {
-  const { todoList } = props;
-  const uncompletedTodos = todoList.filter((t) => t.completed === false);
-
-  if (uncompletedTodos.length > 0) {
-    return (
-      <Badge color="secondary" badgeContent={uncompletedTodos.length}>
-        <FormatListNumberedIcon />
-      </Badge>
-    );
-  }
-
-  return <FormatListNumberedIcon />;
 }
 
 export default App;
