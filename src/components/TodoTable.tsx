@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import {
   Checkbox,
@@ -19,17 +19,7 @@ import * as TodoActions from '../actions/todo';
 import { Todo } from '../model/model';
 import { RootState } from '../reducers';
 
-function TodoTable() {
-  const Root = styled(Paper)`
-    width: 100%;
-    min-width: 260px;
-    display: inline-block;
-  `;
-
-  const ContentTable = styled(Table)`
-    width: 100%;
-  `;
-
+export default function TodoTable() {
   const todoList = useSelector((state: RootState) => state.todoList);
   const todoActions = useActions(TodoActions);
 
@@ -80,4 +70,13 @@ function TodoTable() {
   );
 }
 
-export default TodoTable;
+// Styles
+const Root = styled(Paper)`
+  width: 100%;
+  min-width: 260px;
+  display: inline-block;
+`;
+
+const ContentTable = styled(Table)`
+  width: 100%;
+`;

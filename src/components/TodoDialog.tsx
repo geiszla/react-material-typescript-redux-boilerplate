@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import {
   Button,
@@ -17,16 +17,11 @@ interface Props {
     onClose: () => void;
 }
 
-function TodoDialog(props: Props) {
+export default function TodoDialog(props: Props) {
   const [newTodoText, setNewTodoText] = React.useState('');
   const todoActions = useActions(TodoActions);
 
   const { open, onClose } = props;
-
-  const NameField = styled(TextField)`
-    width: 80%;
-    margin: 20px;
-  `;
 
   const handleClose = () => {
     todoActions.addTodo({
@@ -40,10 +35,6 @@ function TodoDialog(props: Props) {
     setNewTodoText('');
   };
 
-  const handleChange = (event: any) => {
-    setNewTodoText(event.target.value);
-  };
-
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Add a new TODO</DialogTitle>
@@ -51,7 +42,7 @@ function TodoDialog(props: Props) {
         id="multiline-flexible"
         multiline
         value={newTodoText}
-        onChange={handleChange}
+        onChange={(event: any) => setNewTodoText(event.target.value)}
       />
       <DialogActions>
         <Button color="primary" onClick={handleClose}>
@@ -62,4 +53,8 @@ function TodoDialog(props: Props) {
   );
 }
 
-export default TodoDialog;
+// Styles
+const NameField = styled(TextField)`
+  width: 80%;
+  margin: 20px;
+`;

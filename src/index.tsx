@@ -10,18 +10,56 @@ import { createLogger } from 'redux-logger';
 import { PersistConfig, persistReducer, persistStore } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
 import thunk from 'redux-thunk';
+import { ThemeProvider } from 'styled-components';
 
 import { CssBaseline, Typography, withWidth } from '@material-ui/core';
-import { StylesProvider, ThemeProvider } from '@material-ui/styles';
+import { createMuiTheme } from '@material-ui/core/styles';
+import { StylesProvider } from '@material-ui/styles';
 
 import App from './App';
 import rootReducer, { RootState } from './reducers';
-import theme from './theme';
 import registerServiceWorker from './utilities/registerServiceWorker';
 
 // PWA with service worker in production mode
 registerServiceWorker();
 
+// Apply MaterialUI theme and other wrappers
+const AppWithWidth = withWidth()(App);
+
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      light: '#e5e5e5',
+      main: '#727272',
+      dark: '#363839',
+      contrastText: '#fff',
+    },
+    secondary: {
+      light: '#ff5e50',
+      main: '#e41e26',
+      dark: '#a90000',
+      contrastText: '#fff',
+    },
+  },
+});
+
+/* eslint react/jsx-props-no-spreading: 0 */
+const wrappedApp = (props: object) => (
+  <ThemeProvider theme={theme}>
+    <StylesProvider injectFirst>
+      <CssBaseline />
+      <AppWithWidth {...props} />
+    </StylesProvider>
+  </ThemeProvider>
+);
+
+// Connect to Redux store
+const ConnectedApp = connect((state: RootState) => ({
+  todoList: state.todoList,
+  email: state.email,
+}))(wrappedApp);
+
+// Apply Redux wrappers
 const persistConfig: PersistConfig<any> = {
   key: 'root',
   version: 1,
@@ -37,25 +75,7 @@ const middleware = process.env.NODE_ENV === 'development'
 const store = createStore(persistedReducer, {}, middleware);
 const persistor = persistStore(store);
 
-// Apply MaterialUI wrappers
-const AppWithWidth = withWidth()(App);
-
-/* eslint react/jsx-props-no-spreading: 0 */
-const wrapApp = (props: object) => (
-  <ThemeProvider theme={theme}>
-    <StylesProvider injectFirst>
-      <CssBaseline />
-      <AppWithWidth {...props} />
-    </StylesProvider>
-  </ThemeProvider>
-);
-
-// Connect to Redux store
-const ConnectedApp = connect((state: RootState) => ({
-  todoList: state.todoList,
-}))(wrapApp);
-
-// Render the app with Redux wrappers
+// Render the wrapped app
 ReactDOM.render((
   <Provider store={store}>
     <PersistGate

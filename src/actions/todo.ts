@@ -1,6 +1,6 @@
 import { Action, ActionType, Todo } from '../model/model';
 
-export function addTodo(todo: any): Action<Todo> {
+export function addTodo(todo: Todo): Action<Todo> {
   return { type: ActionType.ADD_TODO, payload: todo };
 }
 

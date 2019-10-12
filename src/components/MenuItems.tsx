@@ -9,17 +9,16 @@ import {
   ListItemIcon,
   ListItemText,
 } from '@material-ui/core';
-import { Theme } from '@material-ui/core/styles';
+import { Theme, makeStyles } from '@material-ui/core/styles';
 import FormatListNumberedIcon from '@material-ui/icons/FormatListNumbered';
 import HomeIcon from '@material-ui/icons/Home';
-import { makeStyles } from '@material-ui/styles';
 
 import { Todo } from '../model/model';
 
 // Menu Drawer
 const useStyles = makeStyles((theme: Theme) => ({ drawerHeader: theme.mixins.toolbar }));
 
-function createMenuItems(history: History) {
+export default function createMenuItems(history: History) {
   return (props: { todoList: Todo[] }) => {
     const { todoList } = props;
 
@@ -68,5 +67,3 @@ function TodoIcon(props: { todoList: Todo[] }) {
 
   return <FormatListNumberedIcon />;
 }
-
-export default createMenuItems;

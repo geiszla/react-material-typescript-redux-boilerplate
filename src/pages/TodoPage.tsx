@@ -1,16 +1,13 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import { Button, Grid, Typography } from '@material-ui/core';
-import { Theme } from '@material-ui/core/styles';
-import { useTheme } from '@material-ui/styles';
 
 import TodoTable from '../components';
 import TodoDialog from '../components/TodoDialog';
 
-function TodoPage() {
+export default function TodoPage() {
   const [open, setOpen] = React.useState(false);
-  const theme = useTheme<Theme>();
 
   const handleClose = () => {
     setOpen(false);
@@ -19,27 +16,6 @@ function TodoPage() {
   const handleAddTodo = () => {
     setOpen(true);
   };
-
-  // Styles
-  const Root = styled(Grid)`
-    padding: 20px;
-
-    ${theme.breakpoints.down('md')} {
-      padding-top: 50px;
-      padding-left: 15px;
-      padding-right: 15px;
-    }
-  `;
-
-  const ButtonContainer = styled.div`
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-  `;
-
-  const AddButton = styled(Button)`
-    margin-bottom: 15px;
-  `;
 
   return (
     <Root container>
@@ -70,4 +46,24 @@ function TodoPage() {
   );
 }
 
-export default TodoPage;
+// Styles
+// Styles
+const Root = styled(Grid)`
+  padding: 20px;
+
+  ${(props) => props.theme.breakpoints.down('md')} {
+    padding-top: 50px;
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+`;
+
+const ButtonContainer = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const AddButton = styled(Button)`
+  margin-bottom: 15px;
+`;

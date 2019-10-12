@@ -1,39 +1,17 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import { Button, Typography } from '@material-ui/core';
 
 import HomeBox from '../components/HomeBox';
 import { RootState } from '../reducers';
 
-function HomePage() {
+export default function HomePage() {
   const [boxColor, setBoxColor] = React.useState('red');
   const todoList = useSelector((state: RootState) => state.todoList);
 
   const onButtonClick = () => setBoxColor(boxColor === 'red' ? 'blue' : 'red');
-
-  // Styles
-  const Root = styled.div`
-    height: 100%;
-    text-align: center;
-    padding-top: 20px;
-    padding-left: 15px;
-    padding-right: 15px;
-  `;
-
-  const Center = styled.div`
-    flex: 1;
-    height: 90%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-  `;
-
-  const ChangeColorButton = styled(Button)`
-    margin-top: 20px;
-  `;
 
   return (
     <Root>
@@ -56,4 +34,24 @@ function HomePage() {
   );
 }
 
-export default HomePage;
+// Styles
+const Root = styled.div`
+  height: 100%;
+  text-align: center;
+  padding-top: 20px;
+  padding-left: 15px;
+  padding-right: 15px;
+`;
+
+const Center = styled.div`
+  flex: 1;
+  height: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+`;
+
+const ChangeColorButton = styled(Button)`
+  margin-top: 20px;
+`;

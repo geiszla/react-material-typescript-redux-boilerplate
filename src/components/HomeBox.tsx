@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import {
   Paper,
@@ -16,24 +16,11 @@ const colors = {
   blue: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
 };
 
-function HomeBox(props: Props) {
-  const { color, size } = props;
-
-  const Box = styled(Paper)`
-    display: flex;
-    align-items: center;
-    border-radius: 8px;
-    background: ${colors[color as ('red' | 'blue')]};
-    height: ${size}px;
-    width: ${size}px;
-  `;
-
-  const Text = styled(Typography)`
-    color: white;
-  `;
+export default function HomeBox(props: Props) {
+  const { size, color } = props;
 
   return (
-    <Box>
+    <Box size={size} color={color}>
       <Text variant="subtitle1">
         I&apos;m an example how to handle dynamic styles based on props
       </Text>
@@ -41,4 +28,16 @@ function HomeBox(props: Props) {
   );
 }
 
-export default HomeBox;
+// Styles
+const Box = styled(Paper)<{ size: number, color: string }>`
+  display: flex;
+  align-items: center;
+  border-radius: 8px;
+  background: ${(props) => colors[props.color as ('red' | 'blue')]};
+  height: ${(props) => props.size}px;
+  width: ${(props) => props.size}px;
+`;
+
+const Text = styled(Typography)`
+  color: white;
+`;

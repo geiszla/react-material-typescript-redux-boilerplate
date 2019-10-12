@@ -2,11 +2,10 @@ import { Reducer } from 'redux';
 
 import { Action } from '../model/model';
 
-export default function createReducer<S>(
-  initialState: S,
-  handlers: any,
-): Reducer<S> {
-  const r = (state: S = initialState, action: Action<S>): S => {
+type ReducerHandlers<S> = { [type: string]: (state: S, action: Action<any>) => S }
+
+function createReducer<S>(initialState: S, handlers: ReducerHandlers<S>): Reducer<S> {
+  const reducer = (state: S = initialState, action: Action<S>): S => {
     if (Object.prototype.hasOwnProperty.call(handlers, action.type)) {
       return handlers[action.type](state, action);
     }
@@ -14,5 +13,7 @@ export default function createReducer<S>(
     return state;
   };
 
-  return r as Reducer<S>;
+  return reducer as Reducer<S>;
 }
+
+export default createReducer;
