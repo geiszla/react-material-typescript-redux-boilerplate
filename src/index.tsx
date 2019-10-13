@@ -73,15 +73,15 @@ const middleware = process.env.NODE_ENV === 'development'
   : applyMiddleware(thunk);
 
 const store = createStore(persistedReducer, {}, middleware);
-const persistor = persistStore(store);
-
-// Render the wrapped app
-ReactDOM.render((
-  <Provider store={store}>
-    <PersistGate
-      loading={<Typography>Loading...</Typography>}
-      persistor={persistor}
-    />
-    <ConnectedApp />
-  </Provider>
-), document.getElementById('root'));
+const persistor = persistStore(store, {}, () => {
+  // Render the wrapped app
+  ReactDOM.render((
+    <Provider store={store}>
+      <PersistGate
+        loading={<Typography>Loading...</Typography>}
+        persistor={persistor}
+      />
+      <ConnectedApp />
+    </Provider>
+  ), document.getElementById('root'));
+});
