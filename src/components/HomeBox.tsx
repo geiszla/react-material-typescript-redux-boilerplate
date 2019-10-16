@@ -22,7 +22,7 @@ export default function HomeBox(props: Props) {
   return (
     <Box size={size} color={color}>
       <Text variant="subtitle1">
-        I&apos;m an example how to handle dynamic styles based on props
+        I&apos;m an example of how to handle dynamic styles based on props
       </Text>
     </Box>
   );

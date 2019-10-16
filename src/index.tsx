@@ -23,9 +23,6 @@ import registerServiceWorker from './utilities/registerServiceWorker';
 // PWA with service worker in production mode
 registerServiceWorker();
 
-// Apply MaterialUI theme and other wrappers
-const AppWithWidth = withWidth()(App);
-
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -43,22 +40,6 @@ const theme = createMuiTheme({
   },
 });
 
-/* eslint react/jsx-props-no-spreading: 0 */
-const wrappedApp = (props: object) => (
-  <ThemeProvider theme={theme}>
-    <StylesProvider injectFirst>
-      <CssBaseline />
-      <AppWithWidth {...props} />
-    </StylesProvider>
-  </ThemeProvider>
-);
-
-// Connect to Redux store
-const ConnectedApp = connect((state: RootState) => ({
-  todoList: state.todoList,
-  email: state.email,
-}))(wrappedApp);
-
 // Apply Redux wrappers
 const persistConfig: PersistConfig<any> = {
   key: 'root',
@@ -71,10 +52,36 @@ const persistedReducer = persistReducer(persistConfig, rootReducer());
 const middleware = process.env.NODE_ENV === 'development'
   ? composeWithDevTools(applyMiddleware(createLogger(), thunk))
   : applyMiddleware(thunk);
-
 const store = createStore(persistedReducer, {}, middleware);
-const persistor = persistStore(store, {}, () => {
-  // Render the wrapped app
+
+if (module.hot) {
+  module.hot.accept('./reducers', () => {
+    // eslint-disable-next-line global-require
+    store.replaceReducer(require('./reducers/index'));
+  });
+}
+
+// Function to render the wrapped app
+const renderApp = (Component: React.ComponentType) => {
+  // Apply MaterialUI theme and other wrappers
+  const AppWithWidth = withWidth()(Component);
+
+  /* eslint-disable react/jsx-props-no-spreading */
+  const WrappedApp = (props: object) => (
+    <ThemeProvider theme={theme}>
+      <StylesProvider injectFirst>
+        <CssBaseline />
+        <AppWithWidth {...props} />
+      </StylesProvider>
+    </ThemeProvider>
+  );
+
+  // Connect to Redux store
+  const ConnectedApp = connect((state: RootState) => ({
+    todoList: state.todoList,
+    email: state.email,
+  }))(WrappedApp);
+
   ReactDOM.render((
     <Provider store={store}>
       <PersistGate
@@ -84,4 +91,15 @@ const persistor = persistStore(store, {}, () => {
       <ConnectedApp />
     </Provider>
   ), document.getElementById('root'));
-});
+};
+
+// Rehydrate store, then render app
+const persistor = persistStore(store, {}, () => renderApp(App as any));
+
+// Hot reload
+if (module.hot) {
+  module.hot.accept('./App', () => {
+    // eslint-disable-next-line global-require
+    renderApp(require('./App').default);
+  });
+}

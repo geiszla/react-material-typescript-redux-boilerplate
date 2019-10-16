@@ -83,13 +83,9 @@ export default function App(props?: Props) {
               variant="temporary"
               anchor="left"
               open={mobileOpen}
-              classes={{
-                paper: 'paper',
-              }}
+              classes={{ paper: 'paper' }}
               onClose={handleDrawerToggle}
-              ModalProps={{
-                keepMounted: true, // Better open performance on mobile.
-              }}
+              ModalProps={{ keepMounted: true }} // Better open performance on mobile
             >
               <MenuItems todoList={todoList} />
             </MenuDrawer>
